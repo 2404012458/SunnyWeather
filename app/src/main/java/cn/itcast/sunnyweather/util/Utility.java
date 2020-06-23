@@ -4,9 +4,12 @@ package cn.itcast.sunnyweather.util;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
+
 import cn.itcast.sunnyweather.db.City;
 import cn.itcast.sunnyweather.db.County;
 import cn.itcast.sunnyweather.db.Province;
+import cn.itcast.sunnyweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -61,6 +64,19 @@ public class Utility {
         }
         return false;
     }
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
 
     /**
      * 解析服务器返回的县级数据

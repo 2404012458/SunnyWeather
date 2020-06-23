@@ -14,22 +14,21 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import cn.itcast.sunnyweather.db.City;
-import cn.itcast.sunnyweather.db.County;
-import cn.itcast.sunnyweather.db.Province;
-import cn.itcast.sunnyweather.util.HttpUtil;
-import cn.itcast.sunnyweather.util.Utility;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
-
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.fragment.app.Fragment;
-
-import org.litepal.crud.DataSupport;
-
+import cn.itcast.sunnyweather.db.City;
+import cn.itcast.sunnyweather.db.County;
+import cn.itcast.sunnyweather.db.Province;
+import cn.itcast.sunnyweather.util.HttpUtil;
+import cn.itcast.sunnyweather.util.Utility;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
@@ -75,8 +74,10 @@ public class ChooseAreaFragment extends Fragment {
      */
     private int currentLevel;
 
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+    public View onCreateView(@NonNull LayoutInflater inflater,@Nullable ViewGroup container,@Nullable Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.choose_area, container, false);
         titleText = (TextView) view.findViewById(R.id.title_text);
         backButton = (Button) view.findViewById(R.id.back_button);
@@ -86,7 +87,7 @@ public class ChooseAreaFragment extends Fragment {
         return view;
     }
     @Override
-    public void onActivityCreated(Bundle savedInstanceState){
+    public void onActivityCreated(@Nullable Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -94,9 +95,16 @@ public class ChooseAreaFragment extends Fragment {
                 if(currentLevel == LEVEL_PROVINCE){
                     selectedProvince = provinceList.get(position);
                     queryCities();
-                }else if(currentLevel == LEVEL_CITY){
+                }else if(currentLevel == LEVEL_CITY) {
                     selectedCity = cityList.get(position);
                     queryCounties();
+                }
+                else if (currentLevel == LEVEL_COUNTY){
+                    String weatherId = countyList.get(position).getWeatherId();
+                    Intent intent = new Intent(getActivity(), WeatherActivity.class);
+                    intent.putExtra("weather_id",weatherId);
+                    startActivity(intent);
+                    getActivity().finish();
 
 
                 }
