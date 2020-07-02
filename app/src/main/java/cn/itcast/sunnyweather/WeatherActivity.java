@@ -22,6 +22,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import cn.itcast.sunnyweather.gson.Forecast;
@@ -36,31 +38,19 @@ import okhttp3.Response;
 
 
 public class WeatherActivity extends AppCompatActivity {
-
     public DrawerLayout drawerLayout;
     private Button navButton;
-
     public SwipeRefreshLayout swipeRefresh;
     private ScrollView weatherLayout;
-
     private TextView titleCity;
-
     private TextView titleUpdateTime;
-
     private TextView degreeText;
-
     private TextView weatherInfoText;
-
     private LinearLayout forecastLayout;
-
     private TextView aqiText;
-
     private TextView pm25Text;
-
     private TextView comfortText;
-
     private TextView carWashText;
-
     private TextView sportText;
 
     private ImageView bingPicImg;
@@ -96,6 +86,7 @@ public class WeatherActivity extends AppCompatActivity {
         String weatherString = prefs.getString("weather", null);
         String bingPic=prefs.getString("bing_pic",null);
         if (bingPic!=null){
+            //有缓存数据就使用Glide来加载
             Glide.with(this).load(bingPic).into(bingPicImg);
         }else {
             loadBingPic();
@@ -115,8 +106,10 @@ public class WeatherActivity extends AppCompatActivity {
             showWeatherInfo(weather);
         } else {
             // 无缓存时去服务器查询天气
-             weatherId = getIntent().getStringExtra("weather_id");
+            weatherId = getIntent().getStringExtra("weather_id");
+            //在请求数据的时候将ScrollView隐藏
             weatherLayout.setVisibility(View.INVISIBLE);
+            //从服务器请求天气数据
             requestWeather(weatherId);
         }
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -204,7 +197,11 @@ public class WeatherActivity extends AppCompatActivity {
         carWashText.setText(carWash);
         sportText.setText(sport);
         weatherLayout.setVisibility(View.VISIBLE);
+        //AutUpDATEsERVICE就会一直在后台运行，并保证八个小时更新一次天气
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
+
     /**
      * 加载必应每日一图
      */
@@ -212,12 +209,12 @@ public class WeatherActivity extends AppCompatActivity {
         String requestBingPic = "http://guolin.tech/api/bing_pic";
         HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
             @Override
-            public void onFailure(Call call,  IOException e) {
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 e.printStackTrace();
             }
 
             @Override
-            public void onResponse( Call call,  Response response) throws IOException {
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 final String bingPic = response.body().string();
                 SharedPreferences.Editor editor = PreferenceManager
                         .getDefaultSharedPreferences(WeatherActivity.this).edit();
@@ -233,4 +230,3 @@ public class WeatherActivity extends AppCompatActivity {
         });
     }
 }
-
