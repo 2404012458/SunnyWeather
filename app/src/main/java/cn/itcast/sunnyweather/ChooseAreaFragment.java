@@ -14,25 +14,26 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
-import org.litepal.crud.DataSupport;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import cn.itcast.sunnyweather.db.City;
 import cn.itcast.sunnyweather.db.County;
 import cn.itcast.sunnyweather.db.Province;
 import cn.itcast.sunnyweather.util.HttpUtil;
 import cn.itcast.sunnyweather.util.Utility;
+
+
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import androidx.fragment.app.Fragment;
+
+import org.litepal.crud.DataSupport;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
-
 
 public class ChooseAreaFragment extends Fragment {
     public static final int LEVEL_PROVINCE = 0;

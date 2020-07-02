@@ -1,4 +1,12 @@
 package cn.itcast.sunnyweather;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.Response;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +16,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
+
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,27 +24,16 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import com.bumptech.glide.Glide;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.io.IOException;
 
+import com.bumptech.glide.Glide;
 import cn.itcast.sunnyweather.gson.Forecast;
 import cn.itcast.sunnyweather.gson.Weather;
 import cn.itcast.sunnyweather.service.AutoUpdateService;
 import cn.itcast.sunnyweather.util.HttpUtil;
 import cn.itcast.sunnyweather.util.Utility;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.Response;
 
-
+import org.jetbrains.annotations.NotNull;
 
 public class WeatherActivity extends AppCompatActivity {
     public DrawerLayout drawerLayout;

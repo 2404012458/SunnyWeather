@@ -2,14 +2,18 @@ package cn.itcast.sunnyweather.util;
 
 
 import android.text.TextUtils;
-import android.util.Log;
+
 
 import com.google.gson.Gson;
-
 import cn.itcast.sunnyweather.db.City;
 import cn.itcast.sunnyweather.db.County;
 import cn.itcast.sunnyweather.db.Province;
 import cn.itcast.sunnyweather.gson.Weather;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +28,8 @@ public class Utility {
         if (!TextUtils.isEmpty(response)) {
             try {
                 JSONArray allProvinces = new JSONArray(response);
-                for (int i = 0; i < allProvinces.length(); i++) {
-                    JSONObject provinceObject = allProvinces.getJSONObject(i);
+                for (int i = 0; i < allProvinces.length(); i++) {   /** 循环遍历province列表，从第0个到最后一个  */
+                    JSONObject provinceObject = allProvinces.getJSONObject(i);  /** 通过另外一个JSONObject对象构造一个JSONObject对象  */
                     Province province = new Province();
                     province.setProvinceName(provinceObject.getString("name"));
                     province.setProvinceCode(provinceObject.getInt("id"));
@@ -39,9 +43,6 @@ public class Utility {
         return false;
     }
 
-    /**
-     * 解析服务器返回的省级数据
-     */
     /**
      * 解析服务器返回的市级数据
      */
@@ -64,19 +65,6 @@ public class Utility {
         }
         return false;
     }
-    public static Weather handleWeatherResponse(String response) {
-        try {
-            JSONObject jsonObject = new JSONObject(response);
-            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
-            String weatherContent = jsonArray.getJSONObject(0).toString();
-            return new Gson().fromJson(weatherContent, Weather.class);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
 
     /**
      * 解析服务器返回的县级数据
@@ -100,5 +88,22 @@ public class Utility {
         }
         return false;
     }
+
+    /**
+     * 将返回的JSON数据解析成Weather实体类
+     */
+    public static Weather handleWeatherResponse(String response){
+        try{
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            return new Gson().fromJson(weatherContent, Weather.class);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
+
+
 
